@@ -41,7 +41,12 @@ Data::Structure::FindPath - find paths to elements in data structures
 This module allows you to find the paths to matching elements
 within a data structure.
 
-=head2 Methods
+=head2 Functions
+
+The following functions can be imported in the usual fashion.
+No functions are exported by default.
+
+They all take standard options which are detailed below.
 
 =over
 
@@ -59,7 +64,11 @@ you should be particularly careful with undefined values (which
 will stringify to the empty string) and objects that have
 overloaded stringification.
 
-=item data_find_path_num $value, $data, 
+=item data_find_path_num $value, $data, @options
+
+Returns the paths for values that are C<==> within C<$data>.
+
+=back
 
 =cut
 
@@ -143,5 +152,79 @@ sub _escape {
   return $input;
 }
 
+=head2 Options
+
+The above functions all take the following options.  They can be
+specified by passing them as the last arguments.  For example:
+
+  print data_find_path_eq "foo", $data, inside_objects => 1;
+
+=over
+
+=item inside_objects (boolean)
+
+If this option is enabled objects that are based on hashref or
+arrayrefs are searched in the same way that unblessed hashrefs
+and arrayrefs are.  It is off by default.
+
+=item inside_matches (boolean)
+
+If this option is enabled then searching continues within
+matching data structures.  For example, if your match subroutine
+returns true when passed a hashref with this option enabled the
+contents of that hashref would also be searched for further matches.
+This is off by default.
+
 =back
+
+=head1 AUTHOR
+
+Written by Mark Fowler E<lt>mark@twoshortplanks.comE<gt>
+
+Copryright Photobox 2010.  All Rights Reserved.
+
+This program is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
+
+=head1 BUGS
+
+This module only searches inside hashref and arrayrefs in your data
+structure and makes no attempt to use any magic to delve inside other
+data structures.
+
+For obvious reasons if you pass this module a circular data structure
+it cannot always return all paths (as there are an infinte number of
+them.)  It will return the maximum number of paths without reprocessing
+the same part of the data structure a second time.
+
+This module only supports depth first search at this time.
+
+Please report any bugs or feature requests through the web
+interface at http://rt.cpan.org/Public/Dist/Display.html?Name=Data-Structure-FindPath
+
+=head1 AVAILABILITY
+
+The latest version of this module is available from the
+Comprehensive Perl Archive Network (CPAN). 
+visit http://www.perl.com/CPAN/ to find a CPAN site near you,
+or see http://search.cpan.org/dist/Data-Structure-FindPath/
+
+The development version lives at http://github.com/2shortplanks/Data-Structure-FindPath/.
+Instead of sending patches, please fork this project using the standard
+git and github infrastructure.
+
+=head1 SEE ALSO
+
+L<Data::Visitor> can be used to examine each element of a data
+structure.
+
+L<Data::Structure::Utils> has handy functions to extract all
+objects or references from a data structure.
+
+L<Tree::Simple> has a bunch of tree functions you might like
+to play with.
+
+=cut
+
+1;
 
