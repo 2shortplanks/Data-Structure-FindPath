@@ -1,15 +1,21 @@
 package Data::Structure::FindPath;
-require Exporter;
+use base qw(Exporter);
 
-use vars qw(@EXPORT_OK @ISA $VERSION);
-@ISA = qw(Exporter);
+use 5.006;  # so we can "use warnings" and "no warnings";
 
-$VERSION = 0.01;
+our $VERSION = 0.01;
+our @EXPORT_OK;
 
 use strict;
-#use warnings;
+use warnings;
 
 use Scalar::Util qw(blessed reftype);
+
+# ABSTRACT: find paths to elements in data structures
+
+=head1 NAME
+
+Data::Structure::FindPath - find paths to elements in data structures
 
 =head1 SYNOPSIS
 
@@ -82,7 +88,7 @@ sub _data_find_path {
     return @results;
   }
   
-  if (reftype($data) eq "HASH") {
+  if (ref $data && reftype($data) eq "HASH") {
     push @results, _data_find_path(
       $sub,
       $data->{ $_ },
@@ -92,7 +98,7 @@ sub _data_find_path {
     return @results;
   }
   
-  if (reftype($data) eq "ARRAY") {
+  if (ref $data && reftype($data) eq "ARRAY") {
     push @results, _data_find_path(
       $sub,
       $data->[ $_ ],
